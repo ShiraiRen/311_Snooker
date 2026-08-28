@@ -17,6 +17,9 @@ public class GameMeneger : MonoBehaviour
     [SerializeField]
     private GameObject cueBall;
 
+    [SerializeField]
+    private float xInput = 0f;
+
 
     public static GameMeneger Instance;
 
@@ -40,8 +43,19 @@ public class GameMeneger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RoteteBall();
+
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
             ShootBall();
+
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            xInput = -0.1f;
+
+        else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            xInput = 0.1f;
+
+        else 
+            xInput = 0f;
     }
 
     private void SetBall(Ballcolor col, int i)
@@ -59,4 +73,12 @@ public class GameMeneger : MonoBehaviour
         Rigidbody rd = cueBall.GetComponent<Rigidbody>();
         rd.AddRelativeForce(Vector3.forward * 50, ForceMode.Impulse);
     }
+
+    private void RoteteBall()
+    {
+        if (cueBall !=null)
+            cueBall.transform.Rotate(new Vector3(0f, xInput , 0f));
+    }
+
+
 }
