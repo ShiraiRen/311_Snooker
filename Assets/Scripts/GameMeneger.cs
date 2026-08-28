@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameMeneger : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class GameMeneger : MonoBehaviour
 
     [SerializeField]
     private GameObject ballPrefab;
+
+    [SerializeField]
+    private GameObject cueBall;
 
 
     public static GameMeneger Instance;
@@ -36,7 +40,8 @@ public class GameMeneger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            ShootBall();
     }
 
     private void SetBall(Ballcolor col, int i)
@@ -47,5 +52,11 @@ public class GameMeneger : MonoBehaviour
 
         Ball b = obj.GetComponent<Ball>();
         b.SetColorAndPoint(col);
+    }
+
+    private void ShootBall()
+    {
+        Rigidbody rd = cueBall.GetComponent<Rigidbody>();
+        rd.AddRelativeForce(Vector3.forward * 50, ForceMode.Impulse);
     }
 }
