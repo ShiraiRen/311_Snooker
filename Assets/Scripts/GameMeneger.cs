@@ -20,6 +20,13 @@ public class GameMeneger : MonoBehaviour
     [SerializeField]
     private float xInput = 0f;
 
+    [SerializeField]
+    private GameObject ballLine;
+
+    [SerializeField]
+    private GameObject cam;
+
+
 
     public static GameMeneger Instance;
 
@@ -31,6 +38,9 @@ public class GameMeneger : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+        CameraBehindCueBall();
+
         SetBall(Ballcolor.Red, 1);
         SetBall(Ballcolor.Yellow, 2);
         SetBall(Ballcolor.Green, 3);
@@ -56,6 +66,11 @@ public class GameMeneger : MonoBehaviour
 
         else 
             xInput = 0f;
+
+        if (Keyboard.current.backspaceKey.wasPressedThisFrame)
+            StopBall();
+
+
     }
 
     private void SetBall(Ballcolor col, int i)
@@ -72,6 +87,11 @@ public class GameMeneger : MonoBehaviour
     {
         Rigidbody rd = cueBall.GetComponent<Rigidbody>();
         rd.AddRelativeForce(Vector3.forward * 50, ForceMode.Impulse);
+
+        ballLine.SetActive(false);
+        cam.transform.parent = null;
+        cam.transform.position = new Vector3(0f, 26f, -38.98f);
+        cam.transform.eulerAngles = new Vector3(45f,  0f,  0f);
     }
 
     private void RoteteBall()
@@ -80,5 +100,22 @@ public class GameMeneger : MonoBehaviour
             cueBall.transform.Rotate(new Vector3(0f, xInput , 0f));
     }
 
+    private void StopBall()
+    {
+       Rigidbody rd = cueBall.GetComponent<Rigidbody>();
+        rd.linearVelocity = Vector3.zero;
+        rd.angularVelocity = Vector3.zero;
+        cueBall.transform.eulerAngles = new Vector3(0f, 0f , 0f);
 
+        ballLine.SetActive(true);
+        CameraBehindCueBall();
+
+    }
+
+    private void CameraBehindCueBall()
+    {
+        cam.transform.parent = cueBall.transform;
+        cam.transform.position = cueBall.transform.position + new Vector3(0f, 7f, -15f);
+        cam.transform.eulerAngles = new Vector3(30f, 0f, 0f);
+    }
 }
