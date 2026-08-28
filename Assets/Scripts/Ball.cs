@@ -24,6 +24,8 @@ public class Ball : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData evenData)
     {
         Debug.Log(point);
+        GameMeneger.Instance.PlayerScore += point;
+        Destroy(gameObject);
     }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
